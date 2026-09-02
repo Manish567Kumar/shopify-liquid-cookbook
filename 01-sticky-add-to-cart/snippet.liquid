@@ -1,0 +1,42 @@
+{% comment %}
+TRIGGER_ELEMENT_SELECTOR: ``
+Breakpoint (hide on desktop): ``
+Placeholders above should be set by the merchant when copying into their theme.
+{% endcomment %}
+
+<div class="stk-atc-bar" aria-hidden="true" hidden>
+  <div class="stk-atc-bar__info">
+    <span class="stk-atc-bar__title">{{ product.title }}</span>
+    <span class="stk-atc-bar__price">{{ product.selected_or_first_available_variant.price | money }}</span>
+  </div>
+  <form class="stk-atc-bar__form" action="/cart/add" method="post">
+    <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+    <button type="submit" class="stk-atc-bar__button">Add to cart</button>
+  </form>
+</div>
+
+<script type="module">
+(() => {
+  const TRIGGER_SELECTOR = ``; // CUSTOMIZE: set the selector for your product-form ATC button
+  const bar = document.querySelector('.stk-atc-bar');
+  if (!bar) return;
+
+  const findTrigger = () => document.querySelector(TRIGGER_SELECTOR) || document.querySelector('form[action*="/cart/add"] button[type="submit"], .product-form__submit');
+  const trigger = findTrigger();
+  if (!trigger) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        bar.hidden = true;
+        bar.setAttribute('aria-hidden', 'true');
+      } else {
+        bar.hidden = false;
+        bar.setAttribute('aria-hidden', 'false');
+      }
+    });
+  }, { root: null, threshold: 0 });
+
+  observer.observe(trigger);
+})();
+</script>

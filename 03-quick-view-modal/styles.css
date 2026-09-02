@@ -1,0 +1,8 @@
+.qv-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:100}
+.qv-modal{background:#fff;padding:20px;border-radius:8px;max-width:980px;width:96%;max-height:90vh;overflow:auto}
+.qv-open-btn{position:absolute;right:8px;bottom:8px;padding:6px 8px;border-radius:4px}
+
+/* Accessibility: respect reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .qv-modal{transition:none}
+}

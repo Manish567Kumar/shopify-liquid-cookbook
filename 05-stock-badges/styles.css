@@ -1,0 +1,5 @@
+.stock-badge{display:inline-block;padding:6px 8px;border-radius:4px;font-weight:600}
+.stock-badge--low{background:#fff3cd;color:#856404;border:1px solid #ffeeba}
+.stock-badge--soldout{background:#f8d7da;color:#721c24;border:1px solid #f5c6cb}
+
+/* CUSTOMIZE: configure colors or threshold in snippet.liquid */

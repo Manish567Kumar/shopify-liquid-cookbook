@@ -1,0 +1,50 @@
+<div class="cnt-timer" data-end-date="{{ section.settings.end_date | default: '' }}" aria-live="polite">
+  <span class="cnt-timer__days">--</span>d
+  <span class="cnt-timer__hours">--</span>h
+  <span class="cnt-timer__mins">--</span>m
+  <span class="cnt-timer__secs">--</span>s
+</div>
+
+<script type="module">
+(function(){
+  // Read target date from data attribute set by schema when this section is used
+  const container = document.querySelector('.cnt-timer');
+  if(!container) return;
+  const target = container.getAttribute('data-end-date');
+  if(!target) return;
+  const end = new Date(target);
+  if(isNaN(end)) { container.style.display = 'none'; return; }
+
+  const daysEl = container.querySelector('.cnt-timer__days');
+  const hoursEl = container.querySelector('.cnt-timer__hours');
+  const minsEl = container.querySelector('.cnt-timer__mins');
+  const secsEl = container.querySelector('.cnt-timer__secs');
+
+  function update(){
+    const now = new Date();
+    const diff = end - now;
+    if (diff <= 0) { container.style.display = 'none'; clearInterval(timer); return; }
+    const s = Math.floor(diff/1000);
+    const days = Math.floor(s/86400); const hours = Math.floor((s%86400)/3600);
+    const mins = Math.floor((s%3600)/60); const secs = s%60;
+    daysEl.textContent = days; hoursEl.textContent = String(hours).padStart(2,'0'); minsEl.textContent = String(mins).padStart(2,'0'); secsEl.textContent = String(secs).padStart(2,'0');
+  }
+  update();
+  const timer = setInterval(update, 1000);
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Countdown timer (snippet)",
+  "settings": [
+    {
+      "type": "text",
+      "id": "end_date",
+      "label": "Target date/time (ISO 8601)",
+      "default": "2026-12-31T23:59:59Z"
+    }
+  ],
+  "presets": [{"name":"Countdown Timer"}]
+}
+{% endschema %}

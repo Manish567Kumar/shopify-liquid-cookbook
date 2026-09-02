@@ -1,0 +1,57 @@
+{% comment %}
+FILTER_PARAM_FORMAT: ``
+This snippet builds query params like `?filter_{name}=value1,value2&sort_by=...`. Your theme's exact filter param format may vary — see README.
+{% endcomment %}
+
+<aside class="flt-sort" aria-labelledby="flt-sort-heading">
+  <h3 id="flt-sort-heading">Filter & Sort</h3>
+  <form class="flt-sort__form" method="get" action="{{ collection.url }}">
+    <div class="flt-sort__filters">
+      {% for filter in collection.filters %}
+        <fieldset class="flt-group">
+          <legend>{{ filter.name }}</legend>
+          {% for value in filter.values %}
+            <label><input type="checkbox" name="filter_{{ filter.name | handleize }}" value="{{ value }}" {% if request.params['filter_' | append: filter.name | handleize] contains value %}checked{% endif %}> {{ value }}</label>
+          {% endfor %}
+        </fieldset>
+      {% endfor %}
+    </div>
+
+    <div class="flt-sort__sort">
+      <label for="sort_by">Sort</label>
+      <select id="sort_by" name="sort_by">
+        {% for s in collection.sort_options %}
+          <option value="{{ s.value }}" {% if request.params.sort_by == s.value %}selected{% endif %}>{{ s.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <button type="submit" class="flt-sort__apply">Apply</button>
+  </form>
+</aside>
+
+<script type="module">
+(function(){
+  // Progressive enhancement: join repeated filter_* params into comma-separated values
+  const form = document.querySelector('.flt-sort__form');
+  if(!form) return;
+  form.addEventListener('submit', function(e){
+    // Build URL so repeated checkboxes become comma-separated lists
+    const params = new URLSearchParams();
+    const data = new FormData(form);
+    const map = {};
+    for(const [k,v] of data.entries()){
+      if(k.startsWith('filter_')){
+        map[k] = map[k] || [];
+        map[k].push(v);
+      } else {
+        params.append(k, v);
+      }
+    }
+    Object.keys(map).forEach(k => params.append(k, map[k].join(',')));
+    const url = form.action + '?' + params.toString();
+    window.location.href = url;
+    e.preventDefault();
+  });
+})();
+</script>

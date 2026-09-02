@@ -1,0 +1,7 @@
+.var-swatches{display:flex;gap:8px;align-items:center}
+.var-swatch{border:1px solid transparent;padding:4px;border-radius:6px;background:transparent;cursor:pointer}
+.var-swatch img{width:36px;height:36px;object-fit:cover;border-radius:4px}
+.var-swatch__color{display:inline-block;width:28px;height:28px;border-radius:50%;border:1px solid rgba(0,0,0,.08)}
+.var-swatch--selected{box-shadow:0 0 0 3px rgba(0,0,0,.08);border-color:#000}
+
+/* CUSTOMIZE: replace color mapping or point VARIANT_COLOR_SOURCE in the snippet to a metafield */

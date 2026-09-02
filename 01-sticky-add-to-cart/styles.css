@@ -1,0 +1,11 @@
+.stk-atc-bar{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:space-between;padding:12px;box-shadow:0 -2px 8px rgba(0,0,0,.08);background:#fff;z-index:60}
+.stk-atc-bar__info{display:flex;flex-direction:column;margin-right:12px}
+.stk-atc-bar__title{font-weight:600}
+.stk-atc-bar__price{font-size:0.95rem;color:#111}
+.stk-atc-bar__button{background:#000;color:#fff;border:none;padding:10px 14px;border-radius:4px}
+
+/* CUSTOMIZE */
+/* Breakpoint at which the sticky bar is hidden (desktop). Example: 768px */
+@media (min-width: 768px) {
+  .stk-atc-bar{display:none !important}
+}

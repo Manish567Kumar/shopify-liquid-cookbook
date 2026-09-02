@@ -1,0 +1,10 @@
+.mega-menu__root{list-style:none;margin:0;padding:0;display:flex;gap:20px}
+.mega-menu__item{position:relative}
+.mega-menu__dropdown{position:absolute;left:0;top:100%;background:#fff;padding:20px;border:1px solid #eee;display:none;min-width:600px}
+.mega-menu__item:hover > .mega-menu__dropdown{display:block}
+.mega-menu__columns{display:flex;gap:24px}
+.mega-menu__col{min-width:160px}
+.mega-menu__col--featured{min-width:240px}
+
+/* Keyboard/ARIA: visible focus */
+.mega-menu__link:focus + .mega-menu__dropdown, .mega-menu__link:focus{outline:3px solid rgba(0,0,0,.08)}

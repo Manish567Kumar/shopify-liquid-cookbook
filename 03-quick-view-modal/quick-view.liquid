@@ -1,0 +1,21 @@
+{%- comment -%}
+Minimal alternate product template to render inside the Quick View modal.
+Place this file in your theme as `templates/product.quick-view.liquid` or include the HTML fragment in your theme and make it available at `?view=quick-view`.
+{%- endcomment -%}
+
+<div class="qv-content">
+  <div class="qv-image">
+    {% if product.featured_image %}
+      <img src="{{ product.featured_image | img_url: '600x600' }}" alt="{{ product.title }}">
+    {% endif %}
+  </div>
+  <div class="qv-details">
+    <h2>{{ product.title }}</h2>
+    <div class="qv-price">{{ product.selected_or_first_available_variant.price | money }}</div>
+    <div class="qv-form">
+      {% form 'product', product %}
+        {{ form | placeholder }}
+      {% endform %}
+    </div>
+  </div>
+</div>

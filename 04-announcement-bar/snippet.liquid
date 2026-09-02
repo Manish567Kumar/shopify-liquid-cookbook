@@ -1,0 +1,40 @@
+{% comment %}
+MESSAGES_SOURCE: ``
+Set the source to a metafield list or keep the provided fallback messages.
+{% endcomment %}
+
+{% assign ann_messages = false %}
+{%- comment -%} Example metafield path: shop.metafields.custom.announcement_messages {%- endcomment -%}
+{%- if shop.metafields.announcement and shop.metafields.announcement.messages != blank -%}
+  {% assign ann_messages = shop.metafields.announcement.messages %}
+{%- else -%}
+  {% assign ann_messages = "Free shipping on orders over $50|New seasonal styles just in|Limited time offer" | split: '|' %}
+{%- endif -%}
+
+<div class="ann-bar" role="region" aria-label="Announcement">
+  <div class="ann-bar__wrap">
+    {% for msg in ann_messages %}
+      <div class="ann-bar__message">{{ msg }}</div>
+    {% endfor %}
+  </div>
+</div>
+
+<script type="module">
+(function(){
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReduced) return; // keep static for reduced motion
+
+  const wrap = document.querySelector('.ann-bar__wrap');
+  if (!wrap) return;
+  const messages = wrap.querySelectorAll('.ann-bar__message');
+  let idx = 0;
+  messages.forEach((m,i)=> m.style.display = i===0 ? 'block' : 'none');
+  // CUSTOMIZE: rotation interval in milliseconds (e.g. 4000)
+  const ROTATION_INTERVAL_MS = 4000;
+  setInterval(()=>{
+    messages[idx].style.display = 'none';
+    idx = (idx+1) % messages.length;
+    messages[idx].style.display = 'block';
+  }, ROTATION_INTERVAL_MS);
+})();
+</script>

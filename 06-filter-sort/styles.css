@@ -1,0 +1,6 @@
+.flt-sort{border:1px solid #eee;padding:12px;border-radius:6px}
+.flt-group{margin-bottom:12px}
+.flt-sort__apply{background:#111;color:#fff;padding:8px 12px;border-radius:4px;border:none}
+
+/* ARIA: ensure focus styles visible */
+.flt-sort :focus{outline:3px solid rgba(0,0,0,.08)}

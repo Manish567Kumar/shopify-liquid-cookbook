@@ -1,0 +1,19 @@
+{% comment %}
+STOCK_THRESHOLD: ``
+Set the threshold (number) below which "Only X left" is shown. Replace the default below when copying into your theme.
+{% endcomment %}
+
+{% assign v = product.selected_or_first_available_variant %}
+{% assign stock_threshold = 5 %} {%- comment -%} /* CUSTOMIZE: change this default threshold or replace with a metafield */{%- endcomment -%}
+
+{% if v.inventory_management != blank %}
+  {% if v.inventory_quantity <= 0 %}
+    <div class="stock-badge stock-badge--soldout">Sold out</div>
+  {% elsif v.inventory_quantity <= stock_threshold %}
+    <div class="stock-badge stock-badge--low">Only {{ v.inventory_quantity }} left</div>
+  {% else %}
+    <!-- healthy stock: show nothing -->
+  {% endif %}
+{% else %}
+  <!-- inventory not tracked: do not show a badge -->
+{% endif %}

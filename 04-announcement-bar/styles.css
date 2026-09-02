@@ -1,0 +1,8 @@
+.ann-bar{background:#111;color:#fff;padding:8px 12px;position:relative;text-align:center}
+.ann-bar__wrap{display:flex;align-items:center;justify-content:center}
+.ann-bar__message{min-width:200px}
+
+/* If you prefer a CSS-only rotating approach, replace JS with an animation. Respect reduced-motion. */
+@media (prefers-reduced-motion: reduce){
+  .ann-bar__message{transition:none}
+}

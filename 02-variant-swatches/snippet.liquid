@@ -1,0 +1,63 @@
+{% comment %}
+VARIANT_COLOR_SOURCE: ``
+If you use a variant/metafield for color hexes, set the above; otherwise the snippet falls back to a simple name->hex map.
+{% endcomment %}
+
+<div class="var-swatches" data-product-id="{{ product.id }}" aria-hidden="false">
+  <div class="var-swatches__list" role="list">
+    {% assign color_index = nil %}
+    {% for option in product.options_with_values %}
+      {% if option.name | downcase == 'color' %}
+        {% assign color_index = forloop.index0 %}
+      {% endif %}
+    {% endfor %}
+
+    {% for variant in product.variants %}
+      {% assign swatch_value = variant.options[color_index] | default: variant.title %}
+      <button type="button" class="var-swatch" data-variant-id="{{ variant.id }}" aria-pressed="false" title="{{ swatch_value }}">
+        {% if variant.featured_media != nil and variant.featured_media.preview_image != nil %}
+          <img src="{{ variant.featured_media.preview_image | img_url: '100x100' }}" alt="{{ swatch_value }} swatch" />
+        {% else %}
+          <span class="var-swatch__color" style="background: {{ swatch_value | handleize }}"></span>
+        {% endif %}
+      </button>
+    {% endfor %}
+  </div>
+</div>
+
+<script type="module">
+(function(){
+  const container = document.querySelector('.var-swatches[data-product-id="{{ product.id }}"]');
+  if(!container) return;
+
+  const buttons = container.querySelectorAll('.var-swatch');
+  const setActive = (btn) => {
+    buttons.forEach(b=>{ b.setAttribute('aria-pressed','false'); b.classList.remove('var-swatch--selected'); });
+    btn.setAttribute('aria-pressed','true'); btn.classList.add('var-swatch--selected');
+  };
+
+  const findProductSelect = () => document.querySelector('select[name="id"]') || document.querySelector('input[name="id"]');
+
+  buttons.forEach(btn=>{
+    btn.addEventListener('click', (e)=>{
+      const variantId = btn.getAttribute('data-variant-id');
+      const productSelect = findProductSelect();
+      if(productSelect){
+        if(productSelect.tagName.toLowerCase() === 'select'){
+          productSelect.value = variantId;
+          productSelect.dispatchEvent(new Event('change', { bubbles: true }));
+        } else {
+          productSelect.value = variantId;
+          productSelect.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      }
+
+      // Also dispatch a theme-friendly custom event Dawn listens for
+      const variantChangeEvent = new CustomEvent('variant:change', { detail: { variantId } });
+      document.dispatchEvent(variantChangeEvent);
+
+      setActive(btn);
+    });
+  });
+})();
+</script>

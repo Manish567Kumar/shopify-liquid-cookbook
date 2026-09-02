@@ -1,0 +1,54 @@
+{% comment %}
+FEATURED_BLOCK_SOURCE: ``
+If you use a menu-item-linked metafield or a content block for the promo/featured column, set the source here.
+{% endcomment %}
+
+<nav class="mega-menu" aria-label="Main menu">
+  <ul class="mega-menu__root">
+    {% for link in linklists.main-menu.links %}
+      <li class="mega-menu__item">
+        <a href="{{ link.url }}" class="mega-menu__link">{{ link.title }}</a>
+        {% if link.links.size > 0 %}
+          <div class="mega-menu__dropdown" aria-hidden="true">
+            <div class="mega-menu__columns">
+              {% for col in link.links %}
+                <div class="mega-menu__col">
+                  <h4 class="mega-menu__col-title"><a href="{{ col.url }}">{{ col.title }}</a></h4>
+                  <ul>
+                    {% for sub in col.links %}
+                      <li><a href="{{ sub.url }}">{{ sub.title }}</a></li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              {% endfor %}
+              <!-- optional featured/promo column -->
+              <div class="mega-menu__col mega-menu__col--featured">
+                <!-- FEATURED content source: `` -->
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+</nav>
+
+<script>
+(function(){
+  // Mobile: toggle dropdown on tap
+  const items = document.querySelectorAll('.mega-menu__item > .mega-menu__link');
+  items.forEach(link => {
+    link.addEventListener('click', (e)=>{
+      const parent = link.parentElement;
+      if (window.matchMedia('(hover: none)').matches) {
+        // mobile/touch: toggle
+        const dd = parent.querySelector('.mega-menu__dropdown');
+        if (!dd) return;
+        const open = dd.getAttribute('aria-hidden') === 'false';
+        dd.setAttribute('aria-hidden', open ? 'true' : 'false');
+        e.preventDefault();
+      }
+    });
+  });
+})();
+</script>

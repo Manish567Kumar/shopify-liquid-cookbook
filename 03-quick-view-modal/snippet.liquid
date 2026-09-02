@@ -1,0 +1,59 @@
+{% comment %}
+CARD_SELECTOR: ``
+Use the selector for product cards to inject the Quick View button. Default selector should match your theme's product card element.
+{% endcomment %}
+
+<script type="module">
+(function(){
+  const CARD_SELECTOR = ``; // CUSTOMIZE: set to your product card selector, e.g. '.product-card'
+  const buttonClass = 'qv-open-btn';
+
+  const insertButtons = () => {
+    const cards = document.querySelectorAll(CARD_SELECTOR || '.product-card, .card, .grid__item');
+    cards.forEach(card => {
+      if (card.querySelector('.' + buttonClass)) return;
+      const link = card.querySelector('a[href*="/products/"]');
+      if (!link) return;
+      const btn = document.createElement('button');
+      btn.type = 'button'; btn.className = buttonClass; btn.textContent = 'Quick View';
+      btn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        openQuickView(link.href);
+      });
+      card.appendChild(btn);
+    });
+  };
+
+  async function openQuickView(productUrl){
+    const url = productUrl.split('?')[0] + '?view=quick-view';
+    const resp = await fetch(url, { credentials: 'same-origin' });
+    if (!resp.ok) return;
+    const html = await resp.text();
+    showModal(html);
+  }
+
+  function showModal(html){
+    // create overlay
+    const overlay = document.createElement('div'); overlay.className = 'qv-overlay';
+    overlay.tabIndex = -1;
+    overlay.innerHTML = `<div class="qv-modal" role="dialog" aria-modal="true" aria-label="Quick view">` + html + `</div>`;
+    document.body.appendChild(overlay);
+    document.body.style.overflow = 'hidden';
+
+    // close handlers
+    const close = () => { document.body.removeChild(overlay); document.body.style.overflow = ''; document.removeEventListener('keydown', onKey); };
+    overlay.addEventListener('click', (ev) => { if (ev.target === overlay) close(); });
+    function onKey(e){ if (e.key === 'Escape') close(); }
+    document.addEventListener('keydown', onKey);
+
+    // basic focus trap: focus first focusable inside modal
+    const focusable = overlay.querySelector('button, a, input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    if (focusable) focusable.focus();
+  }
+
+  // init
+  document.addEventListener('DOMContentLoaded', insertButtons);
+  // also run on ajax navigation events (themes may dispatch 'page:load' or similar)
+  document.addEventListener('page:load', insertButtons);
+})();
+</script>
