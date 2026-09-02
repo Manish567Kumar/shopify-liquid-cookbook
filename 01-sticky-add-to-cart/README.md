@@ -12,3 +12,5 @@ Customization
 
 Demo
 - demo.gif placeholder is pending. Please record a short mobile demo and place it as `demo.gif` in this folder.
+
+Note: Demo pending — please record the demo GIF and replace the `demo.gif` placeholder when ready.
